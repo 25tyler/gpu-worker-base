@@ -1,12 +1,11 @@
 """Worker start-up, baked into the public base image (cloud/Dockerfile). The image holds only open-source parts;
 the Labprint code and the model weights are fetched from R2 here, once per worker, then the handler starts.
 
-R2 keys (under BUNDLE_PREFIX, default cloud-test/worker-bundle/): code.tar.gz (git archive of the branch),
-models.tar (sam3.1/, EdgeTAM-hf/, edgetam.pt, rfdetr .pth, face model). A worker that still has them on disk
+R2 keys (under BUNDLE_PREFIX, default cloud-test/worker-bundle/): code.tar.gz (git archive of the branch) and
+models/ (sam3.1/, EdgeTAM-hf/, edgetam.pt, the RF-DETR .pth, the face model), copied file for file. A worker that still has them on disk
 (FlashBoot) skips the download.
 """
 import os
-import subprocess
 import sys
 import tarfile
 import time
@@ -28,10 +27,14 @@ def main():
     s3 = boto3.client("s3", endpoint_url=os.environ["R2_ENDPOINT"], aws_access_key_id=os.environ["R2_ACCESS_KEY_ID"],
                       aws_secret_access_key=os.environ["R2_SECRET_ACCESS_KEY"], region_name="auto")
     if not os.path.exists(f"{MT}/models/.ready"):
-        fetch(s3, "models.tar", "/tmp/models.tar")
-        with tarfile.open("/tmp/models.tar") as t:
-            t.extractall(f"{MT}/models", filter="data")
-        os.remove("/tmp/models.tar")
+        bucket = os.environ["R2_BUCKET"]
+        for page in s3.get_paginator("list_objects_v2").paginate(Bucket=bucket, Prefix=PREFIX + "models/"):
+            for o in page.get("Contents", []):
+                rel = o["Key"][len(PREFIX) + len("models/"):]
+                if rel and not rel.endswith("/"):
+                    dst = f"{MT}/models/{rel}"
+                    os.makedirs(os.path.dirname(dst), exist_ok=True)
+                    fetch(s3, "models/" + rel, dst)
         os.makedirs(f"{MT}/EdgeTAM/checkpoints", exist_ok=True)
         os.replace(f"{MT}/models/edgetam.pt", f"{MT}/EdgeTAM/checkpoints/edgetam.pt")
         open(f"{MT}/models/.ready", "w").close()
