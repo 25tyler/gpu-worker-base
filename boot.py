@@ -2,10 +2,11 @@
 the Labprint code and the model weights are fetched from R2 here, once per worker, then the handler starts.
 
 R2 keys (under BUNDLE_PREFIX, default cloud-test/worker-bundle/): code.tar.gz (git archive of the branch) and
-models/ (sam3.1/, EdgeTAM-hf/, edgetam.pt, the RF-DETR .pth, the face model), copied file for file. A worker that still has them on disk
-(FlashBoot) skips the download.
+models/ (sam3.1/, EdgeTAM-hf/, edgetam.pt, the RF-DETR .pth, the face model), copied file for file. A worker that still has the models on disk
+(FlashBoot) skips their download; the code is fetched again whenever the bundle changed.
 """
 import os
+import shutil
 import sys
 import tarfile
 import time
@@ -39,7 +40,10 @@ def main():
         os.replace(f"{MT}/models/edgetam.pt", f"{MT}/EdgeTAM/checkpoints/edgetam.pt")
         open(f"{MT}/models/.ready", "w").close()
     t1 = time.time()
-    if not os.path.exists(f"{CODE}/.ready"):
+    # the code bundle is checked every start: a worker revived by FlashBoot keeps its disk and would run old code
+    tag = s3.head_object(Bucket=os.environ["R2_BUCKET"], Key=PREFIX + "code.tar.gz")["ETag"]
+    if not os.path.exists(f"{CODE}/.ready") or open(f"{CODE}/.ready").read() != tag:
+        shutil.rmtree(CODE, ignore_errors=True)
         fetch(s3, "code.tar.gz", "/tmp/code.tar.gz")
         os.makedirs(CODE, exist_ok=True)
         with tarfile.open("/tmp/code.tar.gz") as t:
@@ -49,7 +53,7 @@ def main():
         for f in os.listdir(f"{MT}/models"):
             if f.endswith(".onnx"):
                 os.symlink(f"{MT}/models/{f}", f"{CODE}/models/{f}")
-        open(f"{CODE}/.ready", "w").close()
+        open(f"{CODE}/.ready", "w").write(tag)
     print(f"boot: models {t1 - t0:.1f}s, code {time.time() - t1:.1f}s", flush=True)
     os.environ.setdefault("LABPRINT_COMMIT", open(f"{CODE}/COMMIT").read().strip() if os.path.exists(f"{CODE}/COMMIT") else "unknown")
     os.execv(sys.executable, [sys.executable, "-u", f"{CODE}/cloud/handler.py"] + sys.argv[1:])
