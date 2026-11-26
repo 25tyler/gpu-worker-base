@@ -1,12 +1,11 @@
 name: hoi-smoke
 # HOI-DETR inside the built image, on the runner's processor (no GPU here): proves its venv, the pinned HOI-DETR code and
 # the weights load and give detections, before a paid GPU job. Weights come from the public Hugging Face checkpoint.
+# The image tag tested is in smoke/TAG.
 on:
+  push:
+    paths: ['smoke/**', '.github/workflows/hoi-smoke.yml']
   workflow_dispatch:
-    inputs:
-      tag:
-        description: image tag to test
-        required: true
 jobs:
   smoke:
     runs-on: ubuntu-latest
@@ -17,14 +16,14 @@ jobs:
           sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache /usr/local/share/boost /usr/share/swift
           sudo docker image prune -af
       - uses: actions/checkout@v4
-      - run: docker pull ghcr.io/${{ github.repository }}:${{ inputs.tag }}
+      - run: echo "IMG=ghcr.io/${{ github.repository }}:$(cat smoke/TAG)" >> $GITHUB_ENV && docker pull ghcr.io/${{ github.repository }}:$(cat smoke/TAG)
       - name: weights
         run: |
-          mkdir -p w && docker run --rm -v $PWD/smoke:/s -v $PWD/w:/w ghcr.io/${{ github.repository }}:${{ inputs.tag }} \
+          mkdir -p w && docker run --rm -v $PWD/smoke:/s -v $PWD/w:/w $IMG \
             /opt/hoi/bin/python /s/fetch_weights.py /w/hoidetr_weights.pth
       - name: run on the repo's example images, processor
         run: |
-          docker run --rm -e HOI_DEVICE=cpu -e HOI_HOME=/opt/hoi -v $PWD/smoke:/s -v $PWD/w:/w ghcr.io/${{ github.repository }}:${{ inputs.tag }} bash -c \
+          docker run --rm -e HOI_DEVICE=cpu -e HOI_HOME=/opt/hoi -v $PWD/smoke:/s -v $PWD/w:/w $IMG bash -c \
             'ln -s /w/hoidetr_weights.pth /opt/hoi/hoidetr_weights.pth && mkdir /tmp/f && cp /opt/hoi/HOI-DETR/demo/example_images/*.jpg /tmp/f/ && \
              /opt/hoi/bin/python -W ignore /s/hoi_run.py /tmp/f /w/out.json 2>&1 | grep -vE "init_weights|^ *$|scale|INFO" | tail -20 && \
              /opt/hoi/bin/python -c "import json; d=json.load(open(\"/w/out.json\")); print(\"images\", len(d[\"images\"]), \"detections\", sum(len(r[\"detections\"]) for r in d[\"images\"]))"'
