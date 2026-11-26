@@ -1,0 +1,668 @@
+absl-py==2.5.1
+    # via mediapipe
+accelerate==1.15.0
+    # via
+    #   -r requirements.in
+    #   peft
+agent-detector==2.0.0
+    # via fastapi-cloud-cli
+aiodns==4.0.4
+    # via aiohttp
+aiohappyeyeballs==2.7.1
+    # via aiohttp
+aiohttp==3.14.5
+    # via
+    #   aiohttp-retry
+    #   runpod
+aiohttp-retry==2.9.1
+    # via runpod
+aiosignal==1.4.0
+    # via aiohttp
+annotated-doc==0.0.7
+    # via
+    #   fastapi
+    #   typer
+annotated-types==0.8.0
+    # via pydantic
+anthropic==2.7.0
+    # via -r requirements.in
+antlr4-python3-runtime==4.9.3
+    # via
+    #   hydra-core
+    #   omegaconf
+anyio==4.16.0
+    # via
+    #   anthropic
+    #   httpx
+    #   httpx2
+    #   openai
+    #   starlette
+    #   watchfiles
+attrs==26.1.0
+    # via aiohttp
+av==19.0.2
+    # via supervision
+backoff==2.2.1
+    # via runpod
+backports-zstd==1.8.0
+    # via aiohttp
+bcrypt==5.0.0
+    # via paramiko
+boto3==1.43.119
+    # via
+    #   -r requirements.in
+    #   runpod
+botocore==1.43.127
+    # via
+    #   boto3
+    #   s3transfer
+brotli==1.2.1
+    # via aiohttp
+certifi==2026.11.20
+    # via
+    #   httpcore
+    #   httpx
+    #   mediapipe
+    #   requests
+    #   runpod
+    #   sentry-sdk
+cffi==2.1.1
+    # via
+    #   cryptography
+    #   pycares
+    #   pynacl
+    #   sounddevice
+charset-normalizer==3.5.3
+    # via requests
+click==8.5.1
+    # via
+    #   huggingface-hub
+    #   rich-toolkit
+    #   runpod
+    #   uvicorn
+colorama==0.4.6
+    # via runpod
+colorlog==6.12.0
+    # via rapidocr
+contourpy==1.4.0
+    # via matplotlib
+cryptography==50.0.2
+    # via
+    #   paramiko
+    #   pyjwt
+    #   runpod
+cuda-bindings==13.5.0
+    # via torch
+cuda-pathfinder==1.9.1
+    # via cuda-bindings
+cuda-toolkit==13.0.3.0
+    # via torch
+cycler==0.12.1
+    # via matplotlib
+defusedxml==0.7.1
+    # via supervision
+detect-installer==0.2.1
+    # via fastapi-cloud-cli
+dnspython==2.9.2
+    # via email-validator
+docstring-parser==0.18.0
+    # via anthropic
+einops==0.8.2
+    # via -r requirements.in
+email-validator==2.4.0
+    # via
+    #   fastapi
+    #   pydantic
+ensemble-boxes==1.0.11
+    # via -r requirements.in
+fastapi==0.162.0
+    # via
+    #   -r requirements.in
+    #   runpod
+fastapi-cli==0.0.34
+    # via fastapi
+fastapi-cloud-cli==0.28.0
+    # via fastapi-cli
+fastar==0.12.0
+    # via fastapi-cloud-cli
+filelock==4.3.1
+    # via
+    #   huggingface-hub
+    #   torch
+flatbuffers==25.12.19
+    # via
+    #   mediapipe
+    #   onnxruntime
+fonttools==4.69.1
+    # via matplotlib
+frozenlist==1.8.0
+    # via
+    #   aiohttp
+    #   aiosignal
+fsspec==2026.9.0
+    # via
+    #   huggingface-hub
+    #   torch
+ftfy==6.1.1
+    # via -r requirements.in
+googleapis-common-protos==1.76.0
+    # via opentelemetry-exporter-otlp-proto-http
+h11==0.16.0
+    # via
+    #   httpcore
+    #   httpcore2
+    #   uvicorn
+hf-xet==1.8.0
+    # via huggingface-hub
+httpcore==1.0.9
+    # via httpx
+httpcore2==2.16.2
+    # via httpx2
+httptools==0.9.0
+    # via uvicorn
+httpx==0.28.1
+    # via
+    #   fastapi
+    #   fastapi-cloud-cli
+    #   ultralytics-platform
+httpx2==2.16.2
+    # via
+    #   anthropic
+    #   fastapi
+    #   huggingface-hub
+    #   openai
+huggingface-hub==2.4.0
+    # via
+    #   -r requirements.in
+    #   accelerate
+    #   peft
+    #   timm
+    #   tokenizers
+    #   transformers
+hydra-core==1.3.8
+    # via -r requirements.in
+idna==3.20
+    # via
+    #   anyio
+    #   email-validator
+    #   httpx
+    #   httpx2
+    #   requests
+    #   yarl
+imageio==2.38.2
+    # via scikit-image
+inquirerpy==0.3.4
+    # via runpod
+invoke==3.0.3
+    # via paramiko
+iopath==0.1.10
+    # via -r requirements.in
+itsdangerous==2.2.0
+    # via fastapi
+jinja2==3.1.6
+    # via
+    #   -r requirements.in
+    #   fastapi
+    #   torch
+jiter==0.19.0
+    # via
+    #   anthropic
+    #   openai
+jmespath==1.1.0
+    # via
+    #   boto3
+    #   botocore
+kiwisolver==1.5.1
+    # via matplotlib
+lazy-loader==0.6
+    # via scikit-image
+llvmlite==0.50.0
+    # via numba
+markdown-it-py==4.3.0
+    # via rich
+markupsafe==3.0.4
+    # via jinja2
+matplotlib==3.11.2
+    # via
+    #   mediapipe
+    #   supervision
+    #   ultralytics
+mdurl==0.1.2
+    # via markdown-it-py
+mediapipe==1.1.1
+    # via -r requirements.in
+mpmath==1.3.0
+    # via sympy
+multidict==7.2.1
+    # via
+    #   aiohttp
+    #   yarl
+networkx==3.7
+    # via
+    #   scikit-image
+    #   torch
+numba==0.68.1
+    # via ensemble-boxes
+numpy==2.5.4
+    # via
+    #   -r requirements.in
+    #   accelerate
+    #   contourpy
+    #   ensemble-boxes
+    #   imageio
+    #   matplotlib
+    #   mediapipe
+    #   numba
+    #   onnxruntime
+    #   opencv-contrib-python
+    #   opencv-python
+    #   opencv-python-headless
+    #   pandas
+    #   peft
+    #   pycocotools
+    #   rapidocr
+    #   rfdetr
+    #   scikit-image
+    #   scipy
+    #   shapely
+    #   supervision
+    #   tifffile
+    #   torchvision
+    #   transformers
+    #   ultralytics
+    #   ultralytics-thop
+nvidia-cublas==13.1.1.3
+    # via
+    #   cuda-toolkit
+    #   nvidia-cudnn-cu13
+    #   nvidia-cusolver
+nvidia-cuda-cupti==13.0.85
+    # via cuda-toolkit
+nvidia-cuda-nvrtc==13.0.88
+    # via
+    #   cuda-toolkit
+    #   nvidia-cublas
+nvidia-cuda-runtime==13.0.96
+    # via cuda-toolkit
+nvidia-cudnn-cu13==9.24.0.43
+    # via torch
+nvidia-cufft==12.0.0.61
+    # via cuda-toolkit
+nvidia-cufile==1.15.1.6
+    # via cuda-toolkit
+nvidia-curand==10.4.0.35
+    # via cuda-toolkit
+nvidia-cusolver==12.0.4.66
+    # via cuda-toolkit
+nvidia-cusparse==12.6.3.3
+    # via
+    #   cuda-toolkit
+    #   nvidia-cusolver
+nvidia-cusparselt-cu13==0.8.1
+    # via torch
+nvidia-ml-py==13.615.71
+    # via ultralytics
+nvidia-nccl-cu13==2.30.7
+    # via torch
+nvidia-nvjitlink==13.5.37
+    # via
+    #   cuda-toolkit
+    #   nvidia-cufft
+    #   nvidia-cusolver
+    #   nvidia-cusparse
+nvidia-nvshmem-cu13==3.4.5
+    # via torch
+nvidia-nvtx==13.0.85
+    # via cuda-toolkit
+omegaconf==2.3.1
+    # via
+    #   hydra-core
+    #   rapidocr
+onnxruntime==1.31.1
+    # via -r requirements.in
+openai==3.59.0
+    # via -r requirements.in
+opencv-contrib-python==5.1.0.95
+    # via mediapipe
+opencv-python==5.1.0.95
+    # via ultralytics
+opencv-python-headless==5.0.0.93
+    # via
+    #   -r requirements.in
+    #   rapidocr
+opentelemetry-api==1.45.2
+    # via
+    #   anthropic
+    #   fastapi
+    #   opentelemetry-exporter-http-transport
+    #   opentelemetry-exporter-otlp-proto-http
+    #   opentelemetry-sdk
+    #   opentelemetry-semantic-conventions
+opentelemetry-exporter-http-transport==0.66b2
+    # via opentelemetry-exporter-otlp-proto-http
+opentelemetry-exporter-otlp-common==0.66b2
+    # via opentelemetry-exporter-otlp-proto-http
+opentelemetry-exporter-otlp-proto-common==1.45.2
+    # via opentelemetry-exporter-otlp-proto-http
+opentelemetry-exporter-otlp-proto-http==1.45.2
+    # via fastapi
+opentelemetry-proto==1.45.2
+    # via
+    #   opentelemetry-exporter-otlp-proto-common
+    #   opentelemetry-exporter-otlp-proto-http
+opentelemetry-sdk==1.45.2
+    # via
+    #   fastapi
+    #   opentelemetry-exporter-otlp-common
+    #   opentelemetry-exporter-otlp-proto-http
+opentelemetry-semantic-conventions==0.66b2
+    # via opentelemetry-sdk
+packaging==26.4
+    # via
+    #   accelerate
+    #   huggingface-hub
+    #   hydra-core
+    #   lazy-loader
+    #   matplotlib
+    #   onnxruntime
+    #   peft
+    #   runpod
+    #   scikit-image
+    #   transformers
+pandas==3.1.1
+    # via ensemble-boxes
+paramiko==5.1.0
+    # via runpod
+pathspec==1.1.1
+    # via runpod
+peft==0.21.2
+    # via -r requirements.in
+pfzy==0.3.4
+    # via inquirerpy
+pillow==13.0.0
+    # via
+    #   -r requirements.in
+    #   imageio
+    #   matplotlib
+    #   rapidocr
+    #   scikit-image
+    #   supervision
+    #   torchvision
+    #   ultralytics
+polars==2.2.0
+    # via ultralytics
+polars-runtime-32==2.2.0
+    # via polars
+portalocker==4.4.2
+    # via iopath
+prettytable==3.19.0
+    # via runpod
+prompt-toolkit==3.0.53
+    # via inquirerpy
+propcache==0.5.4
+    # via
+    #   aiohttp
+    #   yarl
+protobuf==7.36.2
+    # via
+    #   googleapis-common-protos
+    #   onnxruntime
+    #   opentelemetry-proto
+psutil==7.2.2
+    # via
+    #   accelerate
+    #   peft
+    #   runpod
+    #   ultralytics
+py-cpuinfo==9.0.0
+    # via runpod
+pycares==5.2.1
+    # via aiodns
+pyclipper==1.4.0
+    # via rapidocr
+pycocotools==2.0.11
+    # via -r requirements.in
+pycparser==3.12
+    # via cffi
+pydantic==2.14.1
+    # via
+    #   -r requirements.in
+    #   anthropic
+    #   fastapi
+    #   fastapi-cloud-cli
+    #   openai
+    #   pydantic-extra-types
+    #   pydantic-settings
+    #   rfdetr
+    #   typer
+pydantic-core==2.50.1
+    # via pydantic
+pydantic-extra-types==2.11.1
+    # via fastapi
+pydantic-settings==2.16.3
+    # via fastapi
+pydeprecate==0.9.0
+    # via
+    #   rfdetr
+    #   supervision
+pygments==2.21.0
+    # via rich
+pyjwt==2.10.1
+    # via -r requirements.in
+pynacl==1.6.2
+    # via paramiko
+pyparsing==3.3.3
+    # via matplotlib
+python-dateutil==2.9.0.post0
+    # via
+    #   botocore
+    #   matplotlib
+    #   pandas
+python-dotenv==1.2.4
+    # via
+    #   -r requirements.in
+    #   pydantic-settings
+    #   uvicorn
+python-multipart==0.0.34
+    # via fastapi
+pyyaml==6.0.3
+    # via
+    #   -r requirements.in
+    #   accelerate
+    #   fastapi
+    #   huggingface-hub
+    #   omegaconf
+    #   peft
+    #   rapidocr
+    #   supervision
+    #   timm
+    #   transformers
+    #   ultralytics
+    #   uvicorn
+rapidocr==3.10.0
+    # via -r requirements.in
+regex==2026.11.25
+    # via
+    #   -r requirements.in
+    #   transformers
+requests==2.34.2
+    # via
+    #   opentelemetry-exporter-http-transport
+    #   opentelemetry-exporter-otlp-proto-http
+    #   rapidocr
+    #   rfdetr
+    #   runpod
+    #   supervision
+    #   ultralytics
+rfdetr==1.11.2
+    # via -r requirements.in
+rich==15.0.0
+    # via
+    #   rich-toolkit
+    #   runpod
+    #   typer
+rich-toolkit==0.20.6
+    # via
+    #   fastapi-cli
+    #   fastapi-cloud-cli
+rignore==0.8.1
+    # via fastapi-cloud-cli
+runpod==2.2.1
+    # via -r requirements.in
+s3transfer==0.19.3
+    # via boto3
+safetensors==0.8.0
+    # via
+    #   accelerate
+    #   peft
+    #   timm
+    #   transformers
+scikit-image==0.26.0
+    # via -r requirements.in
+scipy==1.18.1
+    # via
+    #   -r requirements.in
+    #   scikit-image
+    #   supervision
+sentry-sdk==3.0.1
+    # via fastapi-cloud-cli
+setuptools==80.10.2
+    # via
+    #   -r requirements.in
+    #   torch
+shapely==2.2.0
+    # via rapidocr
+shellingham==1.5.4
+    # via typer
+six==1.17.0
+    # via
+    #   python-dateutil
+    #   rapidocr
+sniffio==1.3.1
+    # via
+    #   anthropic
+    #   openai
+sounddevice==0.5.6
+    # via mediapipe
+starlette==1.10.0
+    # via fastapi
+supervision==0.31.5
+    # via
+    #   -r requirements.in
+    #   rfdetr
+sympy==1.14.0
+    # via torch
+tifffile==2026.11.16
+    # via scikit-image
+timm==1.0.30
+    # via -r requirements.in
+tokenizers==0.23.3
+    # via transformers
+tomli==2.5.0
+    # via runpod
+tomlkit==0.15.3
+    # via runpod
+torch==2.14.1+cu130
+    # via
+    #   -r requirements.in
+    #   accelerate
+    #   peft
+    #   rfdetr
+    #   timm
+    #   torchvision
+    #   ultralytics
+    #   ultralytics-thop
+torchvision==0.29.1+cu130
+    # via
+    #   -r requirements.in
+    #   rfdetr
+    #   timm
+    #   ultralytics
+tqdm==4.70.1
+    # via
+    #   huggingface-hub
+    #   iopath
+    #   peft
+    #   rapidocr
+    #   rfdetr
+    #   supervision
+    #   tqdm-loggable
+    #   transformers
+tqdm-loggable==0.4.1
+    # via runpod
+transformers==5.20.2
+    # via
+    #   -r requirements.in
+    #   peft
+    #   rfdetr
+triton==3.8.0
+    # via torch
+truststore==0.10.5
+    # via
+    #   httpcore2
+    #   httpx2
+typer==0.29.2
+    # via
+    #   fastapi-cli
+    #   fastapi-cloud-cli
+    #   transformers
+typing-extensions==4.16.0
+    # via
+    #   aiohttp
+    #   aiosignal
+    #   anthropic
+    #   anyio
+    #   fastapi
+    #   httpx2
+    #   huggingface-hub
+    #   iopath
+    #   openai
+    #   opentelemetry-api
+    #   opentelemetry-exporter-otlp-proto-http
+    #   opentelemetry-sdk
+    #   opentelemetry-semantic-conventions
+    #   pydantic
+    #   pydantic-core
+    #   pydantic-extra-types
+    #   pydantic-settings
+    #   rich-toolkit
+    #   starlette
+    #   torch
+    #   typing-inspection
+typing-inspection==0.4.5
+    # via
+    #   fastapi
+    #   pydantic
+    #   pydantic-settings
+ultralytics==8.4.190
+    # via -r requirements.in
+ultralytics-platform==0.1.121
+    # via ultralytics
+ultralytics-thop==2.2.5
+    # via ultralytics
+urllib3==2.8.0
+    # via
+    #   botocore
+    #   requests
+    #   runpod
+    #   sentry-sdk
+uvicorn==0.54.0
+    # via
+    #   fastapi
+    #   fastapi-cli
+    #   fastapi-cloud-cli
+uvloop==0.23.0
+    # via uvicorn
+watchdog==7.1.1
+    # via runpod
+watchfiles==1.3.0
+    # via uvicorn
+wcwidth==0.9.5
+    # via
+    #   ftfy
+    #   prettytable
+    #   prompt-toolkit
+websockets==17.4
+    # via uvicorn
+yarl==1.25.1
+    # via aiohttp

@@ -8,15 +8,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg git curl
 COPY --from=ghcr.io/astral-sh/uv:0.9 /uv /usr/local/bin/uv
 ENV MAC_TRACK_HOME=/opt/mt
 WORKDIR /opt/mt
-RUN uv venv -q -p 3.12 /opt/venv && \
-    uv pip install --no-cache -p /opt/venv/bin/python torch==2.14.1 torchvision==0.29.1 --index-url https://download.pytorch.org/whl/cu130 && \
-    uv pip install --no-cache -p /opt/venv/bin/python transformers==5.20.2 rfdetr==1.11.2 supervision==0.31.5 timm==1.0.30 \
-      accelerate==1.15.0 peft==0.21.2 hydra-core==1.3.8 ensemble-boxes opencv-python-headless==5.0.0.93 scipy==1.18.1 pycocotools \
-      pillow==13.0.0 huggingface_hub ftfy==6.1.1 regex iopath einops "setuptools<81" ultralytics==8.4.190 numpy==2.5.4 \
-      scikit-image==0.26.0 mediapipe==1.1.1 onnxruntime==1.31.1 rapidocr==3.10.0 boto3==1.43.119 Jinja2==3.1.6 openai \
-      anthropic==2.7.0 python-dotenv==1.2.4 fastapi==0.162.0 pydantic==2.14.1 PyYAML==6.0.3 "PyJWT[crypto]==2.10.1" runpod \
-      "torch==2.14.1" "torchvision==0.29.1" \
-      --index-url https://pypi.org/simple --extra-index-url https://download.pytorch.org/whl/cu130 --index-strategy unsafe-best-match
+# Same packages as before, frozen in requirements.lock (uv pip compile of requirements.in for linux x86_64), and split
+# into several layers instead of one 3.7 GB layer: a new machine downloads and unpacks them side by side, and layers
+# that did not change keep their digest between builds (registry build cache), so a machine that has any earlier
+# version only pulls what changed. Largest and most stable first.
+COPY requirements.lock /opt/requirements.lock
+ENV UVI="--no-cache --no-deps -p /opt/venv/bin/python --index-url https://pypi.org/simple --extra-index-url https://download.pytorch.org/whl/cu130 --index-strategy unsafe-best-match"
+RUN uv venv -q -p 3.12 /opt/venv && uv pip install $UVI $(grep -E '^nvidia-cudnn' /opt/requirements.lock)
+RUN uv pip install $UVI $(grep -E '^nvidia-(cublas|nccl)' /opt/requirements.lock)
+RUN uv pip install $UVI $(grep -E '^nvidia-' /opt/requirements.lock | grep -vE '^nvidia-(cudnn|cublas|nccl)')
+RUN uv pip install $UVI $(grep -E '^(torch|torchvision|triton)==' /opt/requirements.lock)
+RUN uv pip sync --no-cache -p /opt/venv/bin/python --index-url https://pypi.org/simple \
+      --extra-index-url https://download.pytorch.org/whl/cu130 --index-strategy unsafe-best-match /opt/requirements.lock
 # Meta's SAM 3.1 code and EdgeTAM at the commits setup_cuda.sh uses (EdgeTAM with its perceiver fix); roboflow trackers
 RUN mkdir sam3 && cd sam3 && git init -q && git remote add origin https://github.com/facebookresearch/sam3.git && \
     git fetch -q --depth 1 origin 31cb7e624e4fe95301b1be1d4e809111593d2e45 && git checkout -q FETCH_HEAD && rm -rf .git && cd .. && \

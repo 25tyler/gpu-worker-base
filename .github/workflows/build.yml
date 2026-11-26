@@ -1,7 +1,7 @@
 name: build
 on:
   push:
-    branches: [main]
+    branches: ['**']
   workflow_dispatch:
 permissions:
   contents: read
@@ -23,10 +23,21 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      # main is what the live endpoint pulls (:latest); other branches only get their own tags, for testing first
+      - id: tags
+        run: |
+          R=ghcr.io/${{ github.repository }}
+          if [ "${{ github.ref_name }}" = main ]; then echo "t=$R:latest,$R:${{ github.sha }}" >> $GITHUB_OUTPUT
+          else echo "t=$R:${{ github.ref_name }},$R:${{ github.sha }}" >> $GITHUB_OUTPUT; fi
+      # zstd layers unpack several times faster than gzip on the worker (containerd >= 1.5, Docker >= 23); the registry
+      # build cache keeps unchanged layers byte-identical between builds, so workers re-pull only what changed
       - uses: docker/build-push-action@v6
         with:
           context: .
-          push: true
-          tags: ghcr.io/${{ github.repository }}:latest,ghcr.io/${{ github.repository }}:${{ github.sha }}
+          provenance: false
+          tags: ${{ steps.tags.outputs.t }}
           labels: org.opencontainers.image.source=https://github.com/${{ github.repository }}
+          outputs: type=registry,compression=zstd,compression-level=3,force-compression=true,oci-mediatypes=true
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache
+          cache-to: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache,mode=max,compression=zstd,oci-mediatypes=true,image-manifest=true
       - run: df -h /
