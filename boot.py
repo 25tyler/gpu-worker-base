@@ -27,18 +27,24 @@ def main():
     t0 = time.time()
     s3 = boto3.client("s3", endpoint_url=os.environ["R2_ENDPOINT"], aws_access_key_id=os.environ["R2_ACCESS_KEY_ID"],
                       aws_secret_access_key=os.environ["R2_SECRET_ACCESS_KEY"], region_name="auto")
-    if not os.path.exists(f"{MT}/models/.ready"):
-        bucket = os.environ["R2_BUCKET"]
-        for page in s3.get_paginator("list_objects_v2").paginate(Bucket=bucket, Prefix=PREFIX + "models/"):
-            for o in page.get("Contents", []):
-                rel = o["Key"][len(PREFIX) + len("models/"):]
-                if rel and not rel.endswith("/"):
-                    dst = f"{MT}/models/{rel}"
-                    os.makedirs(os.path.dirname(dst), exist_ok=True)
-                    fetch(s3, "models/" + rel, dst)
-        os.makedirs(f"{MT}/EdgeTAM/checkpoints", exist_ok=True)
-        os.replace(f"{MT}/models/edgetam.pt", f"{MT}/EdgeTAM/checkpoints/edgetam.pt")
-        open(f"{MT}/models/.ready", "w").close()
+    # every start lists models/ and fetches any file this disk lacks (or has at another size), so a worker revived by
+    # FlashBoot also picks up a model added to the bundle later (HOI-DETR's weights, Nov 26)
+    bucket = os.environ["R2_BUCKET"]
+    for page in s3.get_paginator("list_objects_v2").paginate(Bucket=bucket, Prefix=PREFIX + "models/"):
+        for o in page.get("Contents", []):
+            rel = o["Key"][len(PREFIX) + len("models/"):]
+            if not rel or rel.endswith("/"):
+                continue
+            dst = f"{MT}/EdgeTAM/checkpoints/edgetam.pt" if rel == "edgetam.pt" else f"{MT}/models/{rel}"
+            if os.path.exists(dst) and os.path.getsize(dst) == o["Size"]:
+                continue
+            os.makedirs(os.path.dirname(dst), exist_ok=True)
+            fetch(s3, "models/" + rel, dst + ".part")
+            os.replace(dst + ".part", dst)
+    hoi = os.environ.get("HOI_HOME")
+    if hoi and os.path.isdir(hoi) and os.path.exists(f"{MT}/models/hoidetr/hoidetr_weights.pth") \
+            and not os.path.exists(f"{hoi}/hoidetr_weights.pth"):
+        os.symlink(f"{MT}/models/hoidetr/hoidetr_weights.pth", f"{hoi}/hoidetr_weights.pth")
     t1 = time.time()
     # the code bundle is checked every start: a worker revived by FlashBoot keeps its disk and would run old code
     tag = s3.head_object(Bucket=os.environ["R2_BUCKET"], Key=PREFIX + "code.tar.gz")["ETag"]
